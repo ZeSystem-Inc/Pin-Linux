@@ -1,0 +1,32 @@
+# Temel Sistem ve Çekirdek
+base
+base-devel
+linux
+linux-firmware
+vim
+nano
+sudo
+networkmanager
+wireless_tools
+wpa_supplicant
+dialog
+
+# Dosya Sistemleri ve Disk Araçları
+btrfs-progs
+xfsprogs
+dosfstools
+mtools
+ntfs-3g
+parted
+efibootmgr
+
+# Önyükleyici (Bootloader)
+grub
+
+# Grafik Arayüz ve Calamares
+xorg-server
+xorg-xinit
+openbox
+alacritty
+calamares
+qt5-declarative
