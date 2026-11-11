@@ -1,7 +1,7 @@
 name: Build PinLinux ISO
 
 on:
-  workflow_dispatch: # Sadece GitHub arayüzünden manuel tetiklenir
+  workflow_dispatch: # Sadece manuel tetiklenir
 
 jobs:
   build:
@@ -15,8 +15,11 @@ jobs:
 
     - name: Archiso ve Gerekli Araçları Kur
       run: |
-        sudo apt update
-        sudo apt install -y archiso dosfstools mtools
+        sudo apt-get update
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository -y universe
+        sudo apt-get update
+        sudo apt-get install -y archiso dosfstools mtools
 
     - name: ISO İmajını Derle (mkarchiso)
       run: |
