@@ -27,7 +27,7 @@ jobs:
           -v ${{ github.workspace }}/pacman-cache:/var/cache/pacman/pkg \
           -w /build \
           archlinux:latest bash -c "
-            pacman -Syu --noconfirm archiso dosfstools mtools && \
+            pacman -Syu --noconfirm archiso dosfstools mtools grub && \
             cp -r /usr/share/archiso/configs/releng/syslinux . && \
             cp -r /usr/share/archiso/configs/releng/efiboot . && \
             rm -rf work out && \
