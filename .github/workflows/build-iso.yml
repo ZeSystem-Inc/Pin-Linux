@@ -33,10 +33,17 @@ jobs:
     - name: ISO Profilini Hazırla ve Derle
       run: |
         rm -rf work out myprofile
-        # Arch'ın resmi releng profilini kopyala (Boot mode ve yapılandırma hatalarını önler)
+        # Arch'ın resmi releng profilini kopyala
         cp -r /usr/share/archiso/configs/releng myprofile
+        
         # Kendi özel paket listemizi releng şablonunun üzerine yaz
         cp packages.x86_64 myprofile/packages.x86_64
+        
+        # Eğer repoda airootfs klasörü varsa, releng'in üzerine birleştir
+        if [ -d "airootfs" ]; then
+          cp -rT airootfs myprofile/airootfs
+        fi
+        
         # mkarchiso ile ISO imajını derle
         mkarchiso -v -w ./work -o ./out myprofile
 
