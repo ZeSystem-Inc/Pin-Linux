@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2034
+# profiledef.sh - Pin Linux Netinst Profile
 
-iso_name="pin-linux"
-iso_label="PIN_$(date +%Y%m)"
-iso_publisher="Salih <https://github.com/>"
-iso_application="Pin Linux Netinst Live/Rescue DVD"
+iso_name="PinLinux-netinst"
+iso_label="PINLINUX_$(date +%Y%m)"
+iso_publisher="ZeSystem-Inc <ZeSystem-Inc@github.com>"
+iso_application="Pin Linux Netinstall Live Media"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
-archps="x86_64"
+buildmodes=('iso')
+bootmodes=('bios.syslinux.mbr' 'bios.syslinux.eltorito' 'uefi-ia32.grub.esp' 'uefi-x86_64.grub.eltorito' 'uefi-x86_64.grub.esp')
+arch="x86_64"
+pacman_conf="pacman.conf"
 airootfs_image_type="squashfs"
-airootfs_image_compression_options=(-Xbcj x86)
+airootfs_image_tool_options=('-b' '1M' '-comp' 'xz' '-Xbcj' 'x86')
+
 file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/root"]="0:0:750"
-  ["/root/.automated_script.sh"]="0:0:700"
-  ["/usr/local/bin/choose-mirror"]="0:0:755"
-  ["/usr/local/bin/Installation_guide"]="0:0:755"
-  ["/etc/gdm/custom.conf"]="0:0:644"
 )
