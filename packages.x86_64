@@ -1,32 +1,45 @@
-# Temel Sistem ve Çekirdek
+# Temel Sistem Paketleri
 base
-base-devel
 linux
 linux-firmware
-vim
-nano
-sudo
-networkmanager
-wireless_tools
-wpa_supplicant
-dialog
+archiso
+systemd
+dbus
+mkinitcpio
 
-# Dosya Sistemleri ve Disk Araçları
+# Ağ ve İletişim (Netinst İçin Şart)
+dhcpcd
+iwd
+networkmanager
+wpa_supplicant
+
+# Disk ve Dosya Sistemi Araçları
+dosfstools
+e2fsprogs
 btrfs-progs
 xfsprogs
-dosfstools
-mtools
 ntfs-3g
+mtools
 parted
-efibootmgr
+util-linux
 
 # Önyükleyici (Bootloader)
 grub
+efibootmgr
+os-prober
 
-# Grafik Arayüz ve Calamares
+# Kurulum ve Grafik Tabanı (Calamares)
+calamares
+qt5-base
+qt5-svg
+qt5-declarative
+kconfig
+kcoreaddons
+icoutils
+kpmcore
+
+# X11 ve Grafik Ortamı (Calamares'i canlı ortamda açabilmek için)
 xorg-server
 xorg-xinit
-openbox
-alacritty
-calamares
-qt5-declarative
+lightdm
+lightdm-gtk-greeter
