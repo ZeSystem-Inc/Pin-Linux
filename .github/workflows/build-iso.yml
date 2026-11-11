@@ -1,7 +1,7 @@
 name: Build PinLinux ISO
 
 on:
-  workflow_dispatch: # Sadece manuel tetiklenir
+  workflow_dispatch: # Sadece GitHub arayüzünden manuel tetiklenir
 
 jobs:
   build:
@@ -13,17 +13,15 @@ jobs:
     - name: Depoyu Kopyala (Checkout)
       uses: actions/checkout@v4
 
-    - name: Archiso ve Gerekli Araçları Kur
+    - name: Arch Linux Docker Konteyneri İle ISO Derle
       run: |
-        sudo apt-get update
-        sudo apt-get install -y software-properties-common
-        sudo add-apt-repository -y universe
-        sudo apt-get update
-        sudo apt-get install -y archiso dosfstools mtools
-
-    - name: ISO İmajını Derle (mkarchiso)
-      run: |
-        sudo mkarchiso -v -w ./work -o ./out .
+        docker run --privileged --rm \
+          -v ${{ github.workspace }}:/build \
+          -w /build \
+          archlinux:latest bash -c "
+            pacman -Syu --noconfirm archiso dosfstools mtools && \
+            mkarchiso -v -w ./work -o ./out .
+          "
 
     - name: Çıktı Dosyasını Yeniden Adlandır ve Sabitle
       run: |
@@ -37,6 +35,6 @@ jobs:
         files: out/PinLinux-netinst.iso
         tag_name: latest
         name: "PinLinux Netinst ISO"
-        body: "ZeSystem-Inc tarafından manuel olarak tetiklenip derlenen PinLinux netinst ISO imajı."
+        body: "ZeSystem-Inc tarafından Docker ortamında manuel olarak tetiklenip derlenen PinLinux netinst ISO imajı."
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
