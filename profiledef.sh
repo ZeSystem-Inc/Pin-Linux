@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# profiledef.sh - Pin Linux Netinst Profile (GRUB Edition)
+# profiledef.sh - Pin Linux Netinst Profile
 
 iso_name="PinLinux-netinst"
 iso_label="PINLINUX_$(date +%Y%m)"
@@ -8,7 +8,7 @@ iso_application="Pin Linux Netinstall Live Media"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')
-bootmodes=('bios.syslinux' 'uefi-x86_64.grub')
+bootmodes=('bios.syslinux.mbr' 'bios.syslinux.eltorito' 'uefi-ia32.grub.esp' 'uefi-x86_64.grub.eltorito' 'uefi-x86_64.grub.esp')
 arch="x86_64"
 pacman_conf="pacman.conf"
 airootfs_image_type="squashfs"
