@@ -7,13 +7,13 @@ systemd
 dbus
 mkinitcpio
 
-# Önyükleme ve Test Araçları (BIOS ve UEFI)
+# Önyükleme Paketleri
 syslinux
+systemd-boot
 grub
 efibootmgr
 edk2-shell
 memtest86+
-memtest86+-efi
 os-prober
 
 # Ağ ve İletişim (Netinst İçin Şart)
