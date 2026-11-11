@@ -28,10 +28,12 @@ jobs:
           -w /build \
           archlinux:latest bash -c "
             pacman -Syu --noconfirm archiso dosfstools mtools grub && \
-            cp -r /usr/share/archiso/configs/releng/syslinux . && \
-            cp -r /usr/share/archiso/configs/releng/efiboot . && \
             rm -rf work out && \
-            mkarchiso -v -w ./work -o ./out .
+            mkdir -p myprofile && \
+            cp -r /usr/share/archiso/configs/releng/* myprofile/ && \
+            cp /build/packages.x86_64 myprofile/packages.x86_64 && \
+            cp /build/profiledef.sh myprofile/profiledef.sh && \
+            mkarchiso -v -w ./work -o ./out myprofile
           "
 
     - name: Çıktı Dosyasını Yeniden Adlandır ve Sabitle
