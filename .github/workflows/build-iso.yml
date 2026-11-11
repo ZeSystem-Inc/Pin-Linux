@@ -19,22 +19,31 @@ jobs:
         restore-keys: |
           pacman-cache-${{ runner.os }}-
 
-    - name: Hazırlık Yap ve ISO İmajını Derle
-      run: |
-        mkdir -p pacman-cache
-        docker run --privileged --rm \
-          -v ${{ github.workspace }}:/build \
-          -v ${{ github.workspace }}/pacman-cache:/var/cache/pacman/pkg \
-          -w /build \
-          archlinux:latest bash -c "
-            pacman -Syu --noconfirm archiso dosfstools mtools grub && \
-            rm -rf work out && \
-            mkdir -p myprofile && \
-            cp -r /usr/share/archiso/configs/releng/* myprofile/ && \
-            cp /build/packages.x86_64 myprofile/packages.x86_64 && \
-            cp /build/profiledef.sh myprofile/profiledef.sh && \
-            mkarchiso -v -w ./work -o ./out myprofile
-          "
+    - name: Arch Linux CHROOT / Bootstrap Ortamı Kur ve Derle
+      uses: mekeor/action-arch-chroot@v1
+      with:
+        foreign-packages: |
+          archiso
+          dosfstools
+          mtools
+          grub
+        run: |
+          # Önbellek dizinini bağla/ayarla
+          mkdir -p /var/cache/pacman/pkg
+          cp -rn /build/pacman-cache/* /var/cache/pacman/pkg/ 2>/dev/null || true
+
+          # Çalışma alanını temizle ve releng şablonunu oluştur
+          rm -rf work out myprofile
+          cp -r /usr/share/archiso/configs/releng myprofile
+          cp /build/packages.x86_64 myprofile/packages.x86_64
+          cp /build/profiledef.sh myprofile/profiledef.sh
+
+          # ISO'yu derle
+          mkarchiso -v -w ./work -o ./out myprofile
+
+          # İndirilen yeni paketleri önbelleğe geri kopyala
+          mkdir -p /build/pacman-cache
+          cp -rn /var/cache/pacman/pkg/* /build/pacman-cache/ 2>/dev/null || true
 
     - name: Çıktı Dosyasını Yeniden Adlandır ve Sabitle
       run: |
