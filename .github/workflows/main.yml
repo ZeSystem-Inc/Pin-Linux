@@ -1,0 +1,34 @@
+name: Build Arch ISO
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Depoyu Kopyala (Checkout)
+      uses: actions/checkout@v4
+
+    - name: Archiso ve Gerekli Araçları Kur
+      run: |
+        sudo pacman -Syu --noconfirm archiso dosfstools mtools
+
+    - name: ISO İmajını Derle (mkarchiso)
+      run: |
+        sudo mkarchiso -v -w ./work -o ./out .
+
+    - name: Çıktı Dosyasını Yeniden Adlandır ve Yükle
+      uses: softprops/action-gh-release@v1
+      with:
+        files: out/*.iso
+        tag_name: v1.0.${{ github.run_number }}
+        name: "Özel Arch ISO v1.0.${{ github.run_number }}"
+        body: "GitHub Actions üzerinden otomatik olarak derlenen Calamares destekli Netinst ISO."
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
