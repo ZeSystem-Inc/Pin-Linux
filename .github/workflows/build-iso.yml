@@ -1,9 +1,7 @@
-name: Build Arch ISO
+name: Build PinLinux ISO
 
 on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
+  workflow_dispatch: # Sadece GitHub arayüzünden manuel tetiklenir
 
 jobs:
   build:
@@ -23,12 +21,18 @@ jobs:
       run: |
         sudo mkarchiso -v -w ./work -o ./out .
 
-    - name: Çıktı Dosyasını Yeniden Adlandır ve Yükle
+    - name: Çıktı Dosyasını Yeniden Adlandır ve Sabitle
+      run: |
+        cd out
+        ISO_FILE=$(ls *.iso)
+        mv $ISO_FILE PinLinux-netinst.iso
+
+    - name: Derlenen ISO'yu GitHub Releases'e Yükle
       uses: softprops/action-gh-release@v1
       with:
-        files: out/*.iso
-        tag_name: v1.0.${{ github.run_number }}
-        name: "Özel Arch ISO v1.0.${{ github.run_number }}"
-        body: "GitHub Actions üzerinden otomatik olarak derlenen Calamares destekli Netinst ISO."
+        files: out/PinLinux-netinst.iso
+        tag_name: latest
+        name: "PinLinux Netinst ISO"
+        body: "ZeSystem-Inc tarafından manuel olarak tetiklenip derlenen PinLinux netinst ISO imajı."
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
