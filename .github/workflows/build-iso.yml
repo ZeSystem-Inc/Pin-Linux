@@ -15,7 +15,8 @@ jobs:
 
     - name: Archiso ve Gerekli Araçları Kur
       run: |
-        sudo pacman -Syu --noconfirm archiso dosfstools mtools
+        sudo apt update
+        sudo apt install -y archiso dosfstools mtools
 
     - name: ISO İmajını Derle (mkarchiso)
       run: |
