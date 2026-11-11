@@ -15,10 +15,8 @@ jobs:
 
     - name: Archiso ve Gerekli Araçları Kur
       run: |
-        sudo apt-get update
-        sudo add-repository universe
-        sudo apt-get update
-        sudo apt-get install -y --no-install-recommends archiso dosfstools mtools
+        sudo apt update
+        sudo apt install -y archiso dosfstools mtools
 
     - name: ISO İmajını Derle (mkarchiso)
       run: |
