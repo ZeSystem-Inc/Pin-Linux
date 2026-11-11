@@ -27,3 +27,11 @@ xorg-server
 xorg-xinit
 lightdm
 lightdm-gtk-greeter
+calamares
+qt5-base
+qt5-svg
+qt5-declarative
+kconfig
+kcoreaddons
+icoutils
+kpmcore
