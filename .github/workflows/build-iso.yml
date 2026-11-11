@@ -1,7 +1,7 @@
 name: Build PinLinux ISO
 
 on:
-  workflow_dispatch: # Sadece GitHub arayüzünden manuel tetiklenir
+  workflow_dispatch:
 
 jobs:
   build:
@@ -11,14 +11,16 @@ jobs:
     - name: Depoyu Kopyala (Checkout)
       uses: actions/checkout@v4
 
-    - name: Temizlik Yap ve ISO İmajını Derle
+    - name: Hazırlık Yap ve ISO İmajını Derle
       run: |
         docker run --privileged --rm \
           -v ${{ github.workspace }}:/build \
           -w /build \
           archlinux:latest bash -c "
-            rm -rf work out && \
             pacman -Syu --noconfirm archiso dosfstools mtools && \
+            cp -r /usr/share/archiso/configs/releng/syslinux . && \
+            cp -r /usr/share/archiso/configs/releng/efiboot . && \
+            rm -rf work out && \
             mkarchiso -v -w ./work -o ./out .
           "
 
