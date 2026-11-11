@@ -33,9 +33,11 @@ jobs:
     - name: ISO Profilini Hazırla ve Derle
       run: |
         rm -rf work out myprofile
+        # Arch'ın resmi releng profilini kopyala (Boot mode ve yapılandırma hatalarını önler)
         cp -r /usr/share/archiso/configs/releng myprofile
+        # Kendi özel paket listemizi releng şablonunun üzerine yaz
         cp packages.x86_64 myprofile/packages.x86_64
-        cp profiledef.sh myprofile/profiledef.sh
+        # mkarchiso ile ISO imajını derle
         mkarchiso -v -w ./work -o ./out myprofile
 
     - name: Çıktı Dosyasını Yeniden Adlandır
