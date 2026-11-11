@@ -11,10 +11,20 @@ jobs:
     - name: Depoyu Kopyala (Checkout)
       uses: actions/checkout@v4
 
+    - name: Pacman Önbelleğini (Cache) Hazırla
+      uses: actions/cache@v4
+      with:
+        path: pacman-cache
+        key: pacman-cache-${{ runner.os }}-${{ hashFiles('packages.x86_64') }}
+        restore-keys: |
+          pacman-cache-${{ runner.os }}-
+
     - name: Hazırlık Yap ve ISO İmajını Derle
       run: |
+        mkdir -p pacman-cache
         docker run --privileged --rm \
           -v ${{ github.workspace }}:/build \
+          -v ${{ github.workspace }}/pacman-cache:/var/cache/pacman/pkg \
           -w /build \
           archlinux:latest bash -c "
             pacman -Syu --noconfirm archiso dosfstools mtools && \
