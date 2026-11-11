@@ -3,12 +3,12 @@
 
 iso_name="PinLinux-netinst"
 iso_label="PINLINUX_$(date +%Y%m)"
-iso_publisher="ZeSystem-Inc <ZeSystem-Inc@github.com>"
-iso_application="Pin Linux Netinst Live Media"
+iso_publisher="ZeSystem-Inc <https://github.com/ZeSystem-Inc>"
+iso_application="Pin Linux Netinstall Live Media"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')
-bootmodes=('bios.syslinux' 'uefi-x86_64.grub')
+bootmodes=('bios.syslinux.mbr' 'bios.syslinux.eltorito' 'uefi-x86_64.systemd-boot.esp' 'uefi-x86_64.systemd-boot.eltorito')
 arch="x86_64"
 pacman_conf="pacman.conf"
 airootfs_image_type="squashfs"
