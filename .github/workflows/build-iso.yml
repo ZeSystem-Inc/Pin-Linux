@@ -6,8 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
     - name: Depoyu Kopyala (Checkout)
@@ -30,12 +28,8 @@ jobs:
         ISO_FILE=$(ls *.iso)
         mv $ISO_FILE PinLinux-netinst.iso
 
-    - name: Derlenen ISO'yu GitHub Releases'e Yükle
-      uses: softprops/action-gh-release@v1
+    - name: Derlenen ISO'yu Artifact Olarak Kaydet
+      uses: actions/upload-artifact@v4
       with:
-        files: out/PinLinux-netinst.iso
-        tag_name: latest
-        name: "PinLinux Netinst ISO"
-        body: "ZeSystem-Inc tarafından Docker ortamında temiz derlenen PinLinux netinst ISO imajı."
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: PinLinux-netinst-iso
+        path: out/PinLinux-netinst.iso
