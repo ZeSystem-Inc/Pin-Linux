@@ -1,4 +1,3 @@
-# Temel Sistem Paketleri
 base
 linux
 linux-firmware
@@ -6,23 +5,16 @@ archiso
 systemd
 dbus
 mkinitcpio
-
-# Önyükleme Paketleri
 syslinux
-systemd-boot
 grub
 efibootmgr
 edk2-shell
 memtest86+
 os-prober
-
-# Ağ ve İletişim (Netinst İçin Şart)
 dhcpcd
 iwd
 networkmanager
 wpa_supplicant
-
-# Disk ve Dosya Sistemi Araçları
 dosfstools
 e2fsprogs
 btrfs-progs
@@ -31,18 +23,6 @@ ntfs-3g
 mtools
 parted
 util-linux
-
-# Kurulum ve Grafik Tabanı (Calamares)
-calamares
-qt5-base
-qt5-svg
-qt5-declarative
-kconfig
-kcoreaddons
-icoutils
-kpmcore
-
-# X11 ve Display Manager
 xorg-server
 xorg-xinit
 lightdm
