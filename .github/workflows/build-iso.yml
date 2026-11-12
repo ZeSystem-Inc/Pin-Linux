@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       release_to_github:
-        description: 'Derlenen ISO'yu GitHub Releases a otomatik yükle'
+        description: "Derlenen ISO'yu GitHub Releases'a otomatik yükle"
         required: true
         type: boolean
         default: false
@@ -48,29 +48,26 @@ jobs:
         
         mkarchiso -v -w ./work -o ./out myprofile
 
-    - name: Çıktı Dosyasını Yeniden Adlandır ve Versiyonla
-      id: rename_iso
+    - name: Çıktı Dosyasını Yeniden Adlandır
       run: |
         cd out
         ISO_FILE=$(ls *.iso)
-        NEW_NAME="PinLinux-netinst-$(date +%Y%m%d).iso"
-        mv $ISO_FILE $NEW_NAME
-        echo "iso_name=$NEW_NAME" >> $GITHUB_OUTPUT
-        echo "iso_path=out/$NEW_NAME" >> $GITHUB_OUTPUT
+        mv $ISO_FILE PinLinux-netinst-rolling.iso
 
     - name: Derlenen ISO'yu Artifact Olarak Kaydet
       uses: actions/upload-artifact@v4
       with:
-        name: PinLinux-netinst-iso
-        path: ${{ steps.rename_iso.outputs.iso_path }}
+        name: PinLinux-netinst-rolling
+        path: out/PinLinux-netinst-rolling.iso
 
-    - name: GitHub Release Oluştur ve Yayınla
+    - name: GitHub Release Güncelle ve Yayınla
       if: ${{ inputs.release_to_github == true }}
       uses: softprops/action-gh-release@v2
       with:
-        files: ${{ steps.rename_iso.outputs.iso_path }}
-        tag_name: v$(date +%Y.%m.%d-%H%M)
-        name: "PinLinux Netinstall ISO - $(date +%Y-%m-%d)"
-        body: "Bu sürüm GitHub Actions üzerinden otomatik olarak derlenmiştir."
+        files: out/PinLinux-netinst-rolling.iso
+        tag_name: rolling
+        name: "PinLinux Netinstall (Rolling)"
+        body: "PinLinux Rolling Release netinstall kalıbı. Her derlemede en güncel paketlerle otomatik olarak yenilenir."
+        make_latest: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
