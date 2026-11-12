@@ -2,6 +2,12 @@ name: Build PinLinux ISO
 
 on:
   workflow_dispatch:
+    inputs:
+      release_to_github:
+        description: 'Derlenen ISO'yu GitHub Releases a otomatik yükle'
+        required: true
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -33,28 +39,38 @@ jobs:
     - name: ISO Profilini Hazırla ve Derle
       run: |
         rm -rf work out myprofile
-        # Arch'ın resmi releng profilini kopyala
         cp -r /usr/share/archiso/configs/releng myprofile
-        
-        # Kendi özel paket listemizi releng şablonunun üzerine yaz
         cp packages.x86_64 myprofile/packages.x86_64
         
-        # Eğer repoda airootfs klasörü varsa, releng'in üzerine birleştir
         if [ -d "airootfs" ]; then
           cp -rT airootfs myprofile/airootfs
         fi
         
-        # mkarchiso ile ISO imajını derle
         mkarchiso -v -w ./work -o ./out myprofile
 
-    - name: Çıktı Dosyasını Yeniden Adlandır
+    - name: Çıktı Dosyasını Yeniden Adlandır ve Versiyonla
+      id: rename_iso
       run: |
         cd out
         ISO_FILE=$(ls *.iso)
-        mv $ISO_FILE PinLinux-netinst.iso
+        NEW_NAME="PinLinux-netinst-$(date +%Y%m%d).iso"
+        mv $ISO_FILE $NEW_NAME
+        echo "iso_name=$NEW_NAME" >> $GITHUB_OUTPUT
+        echo "iso_path=out/$NEW_NAME" >> $GITHUB_OUTPUT
 
     - name: Derlenen ISO'yu Artifact Olarak Kaydet
       uses: actions/upload-artifact@v4
       with:
         name: PinLinux-netinst-iso
-        path: out/PinLinux-netinst.iso
+        path: ${{ steps.rename_iso.outputs.iso_path }}
+
+    - name: GitHub Release Oluştur ve Yayınla
+      if: ${{ inputs.release_to_github == true }}
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ${{ steps.rename_iso.outputs.iso_path }}
+        tag_name: v$(date +%Y.%m.%d-%H%M)
+        name: "PinLinux Netinstall ISO - $(date +%Y-%m-%d)"
+        body: "Bu sürüm GitHub Actions üzerinden otomatik olarak derlenmiştir."
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
