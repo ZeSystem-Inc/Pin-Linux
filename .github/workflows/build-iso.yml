@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # GitHub Releases'a dosya yükleyebilmek için zorunlu yetki
     container:
       image: archlinux:latest
       options: --privileged
