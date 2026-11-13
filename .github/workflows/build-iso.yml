@@ -38,23 +38,40 @@ jobs:
         mkdir -p pacman-cache
         cp -rn /var/cache/pacman/pkg/* pacman-cache/ 2>/dev/null || true
 
-    - name: ISO Profilini Hazırla ve Derle
+    - name: ISO Profilini Hazırla
       run: |
         rm -rf work out myprofile
         cp -r /usr/share/archiso/configs/releng myprofile
-        cp packages.x86_64 myprofile/packages.x86_64
-        
+
+        # releng paketleri + senin paketlerin (yorumlar ve tekrarlar elenir)
+        cat /usr/share/archiso/configs/releng/packages.x86_64 packages.x86_64 \
+          | grep -v '^[[:space:]]*#' | grep -v '^[[:space:]]*$' \
+          | sort -u > myprofile/packages.x86_64
+
+        # Senin airootfs dosyaların (motd, calamares vb.) releng'in üstüne yazılır
         if [ -d "airootfs" ]; then
           cp -rT airootfs myprofile/airootfs
         fi
-        
-        mkarchiso -v -w ./work -o ./out myprofile
+
+        # Güvenlik kontrolü: archiso hook'larının paketi listede olmalı
+        grep -qx 'mkinitcpio-archiso' myprofile/packages.x86_64 \
+          || echo "mkinitcpio-archiso" >> myprofile/packages.x86_64
+
+    - name: ISO'yu Derle
+      run: |
+        mkarchiso -v -w ./work -o ./out myprofile 2>&1 | tee build.log
+        # initramfs hook hatası olursa derlemeyi burada durdur
+        if grep -qE "Hook '.*' cannot be found" build.log; then
+          echo "::error::initramfs hook hatası var, ISO bozuk olurdu"
+          grep -E "Hook '.*' cannot be found" build.log
+          exit 1
+        fi
 
     - name: Çıktı Dosyasını Yeniden Adlandır
       run: |
         cd out
         ISO_FILE=$(ls *.iso)
-        mv $ISO_FILE PinLinux-netinst-rolling.iso
+        mv "$ISO_FILE" PinLinux-netinst-rolling.iso
 
     - name: Derlenen ISO'yu Artifact Olarak Kaydet
       uses: actions/upload-artifact@v4
