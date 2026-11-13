@@ -1,12 +1,7 @@
-base
-linux
-linux-firmware
-archiso
-syslinux
-sudo
 networkmanager
 wireless_tools
 wpa_supplicant
 dialog
 curl
 git
+sudo
