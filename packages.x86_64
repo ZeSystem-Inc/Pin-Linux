@@ -5,3 +5,10 @@ dialog
 curl
 git
 sudo
+xorg-server
+xorg-xinit
+xf86-input-libinput
+mesa
+openbox
+xterm
+ttf-dejavu
