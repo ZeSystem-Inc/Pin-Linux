@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openbox_config xmlns="http://openbox.org/3.4/rc">
+  <keyboard>
+    <keybind key="S-F10">
+      <action name="Execute">
+        <command>xterm -en UTF-8 -bg black -fg white -fa "DejaVu Sans Mono" -fs 11 -geometry 110x32</command>
+      </action>
+    </keybind>
+  </keyboard>
+</openbox_config>
