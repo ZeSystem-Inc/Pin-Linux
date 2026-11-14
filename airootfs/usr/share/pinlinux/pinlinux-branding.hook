@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = filesystem
+
+[Action]
+Description = Pin Linux kimliği yeniden uygulanıyor...
+When = PostTransaction
+Exec = /usr/bin/cp /usr/share/pinlinux/os-release /usr/lib/os-release
