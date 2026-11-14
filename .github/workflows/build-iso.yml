@@ -48,14 +48,31 @@ jobs:
           | grep -v '^[[:space:]]*#' | grep -v '^[[:space:]]*$' \
           | sort -u > myprofile/packages.x86_64
 
-        # Senin airootfs dosyaların (motd, calamares vb.) releng'in üstüne yazılır
+        # Senin airootfs dosyaların releng'in üstüne yazılır
         if [ -d "airootfs" ]; then
           cp -rT airootfs myprofile/airootfs
         fi
 
-        # Güvenlik kontrolü: archiso hook'larının paketi listede olmalı
+        # archiso hook paketi mutlaka listede olmalı
         grep -qx 'mkinitcpio-archiso' myprofile/packages.x86_64 \
           || echo "mkinitcpio-archiso" >> myprofile/packages.x86_64
+
+        # ISO kimliği
+        sed -i \
+          -e 's|^iso_name=.*|iso_name="pinlinux"|' \
+          -e 's|^iso_label=.*|iso_label="PINLINUX_$(date +%Y%m)"|' \
+          -e 's|^iso_publisher=.*|iso_publisher="PinLinux Project <https://github.com/ZeSystem-Inc>"|' \
+          -e 's|^iso_application=.*|iso_application="PinLinux Installer"|' \
+          myprofile/profiledef.sh
+
+        # Kurulum scriptine çalıştırma izni
+        echo 'file_permissions+=(["/usr/local/bin/pin-setup"]="0:0:755")' >> myprofile/profiledef.sh
+
+        # Önyükleme menüsündeki "Arch Linux" yazılarını değiştir
+        sed -i 's/Arch Linux/Pin Linux/g' \
+          myprofile/syslinux/*.cfg myprofile/grub/*.cfg 2>/dev/null || true
+        sed -i 's/Arch Linux/Pin Linux/g' \
+          myprofile/efiboot/loader/entries/*.conf 2>/dev/null || true
 
     - name: ISO'yu Derle
       run: |
