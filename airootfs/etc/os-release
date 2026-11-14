@@ -1,0 +1,6 @@
+NAME="Pin Linux"
+PRETTY_NAME="Pin Linux"
+ID=pinlinux
+ID_LIKE=arch
+BUILD_ID=rolling
+HOME_URL="https://github.com/ZeSystem-Inc"
