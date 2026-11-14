@@ -23,8 +23,14 @@ fi
 
 # Kurulan sisteme Pin Linux kimliğini yaz (en iyi çaba)
 if [ -d /mnt/etc ]; then
-    cp /etc/os-release /mnt/etc/os-release 2>/dev/null
-    cp /etc/issue /mnt/etc/issue 2>/dev/null
+    # Hook'un kaynak aldığı os-release ve hook'un kendisi
+    install -Dm644 /etc/os-release /mnt/usr/share/pinlinux/os-release
+    install -Dm644 /usr/share/pinlinux/pinlinux-branding.hook \
+        /mnt/etc/pacman.d/hooks/pinlinux-branding.hook
+
+    # Şimdilik kimliği doğrudan uygula
+    cp /etc/os-release /mnt/usr/lib/os-release
+    cp /etc/issue /mnt/etc/issue
 fi
 
 read -rp "Kurulum tamamlandı. Yeniden başlatmak için Enter..." _
