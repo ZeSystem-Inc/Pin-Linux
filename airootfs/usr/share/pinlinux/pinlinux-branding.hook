@@ -3,8 +3,9 @@ Operation = Install
 Operation = Upgrade
 Type = Package
 Target = filesystem
+Target = grub
 
 [Action]
 Description = Pin Linux kimliği yeniden uygulanıyor...
 When = PostTransaction
-Exec = /usr/bin/cp /usr/share/pinlinux/os-release /usr/lib/os-release
+Exec = /usr/share/pinlinux/apply-branding.sh
