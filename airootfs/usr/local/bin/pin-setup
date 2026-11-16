@@ -21,16 +21,16 @@ if [ $rc -ne 0 ]; then
     exit $rc
 fi
 
-# Kurulan sisteme Pin Linux kimliğini yaz (en iyi çaba)
+# Kurulan sisteme Pin Linux kimliğini ve hook'u yerleştir
 if [ -d /mnt/etc ]; then
-    # Hook'un kaynak aldığı os-release ve hook'un kendisi
     install -Dm644 /etc/os-release /mnt/usr/share/pinlinux/os-release
+    install -Dm644 /etc/issue /mnt/usr/share/pinlinux/issue
+    install -Dm755 /usr/share/pinlinux/apply-branding.sh \
+        /mnt/usr/share/pinlinux/apply-branding.sh
     install -Dm644 /usr/share/pinlinux/pinlinux-branding.hook \
         /mnt/etc/pacman.d/hooks/pinlinux-branding.hook
 
-    # Şimdilik kimliği doğrudan uygula
-    cp /etc/os-release /mnt/usr/lib/os-release
-    cp /etc/issue /mnt/etc/issue
+    arch-chroot /mnt /usr/share/pinlinux/apply-branding.sh
 fi
 
 read -rp "Kurulum tamamlandı. Yeniden başlatmak için Enter..." _
